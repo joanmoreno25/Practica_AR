@@ -10,7 +10,10 @@ public class Move : MonoBehaviour
     [SerializeField] private float speed = 0.6f;
 
     [Header("Parámetros de retorno")]
-    [SerializeField] private float returnSpeed = 0.2f;   // 👈 RETORNO LENTO Y SUAVE
+    [SerializeField] private float returnSpeed = 0.2f;   // retorno lento
+
+    [Header("Parámetros de contacto")]
+    [SerializeField] private float contactDistance = 0.05f; // distancia entre centros cuando los cubos "se tocan"
 
     private Transform other;
     private Vector3 originalLocalPosition;
@@ -19,14 +22,17 @@ public class Move : MonoBehaviour
 
     void Start()
     {
+        // Posición local original encima del marcador
         originalLocalPosition = transform.localPosition;
     }
 
     void Update()
     {
+        // Si ya ha hecho ida + vuelta, no hacemos nada más
         if (finished)
             return;
 
+        // Buscar el otro objeto (Marker2) la primera vez
         if (other == null)
         {
             GameObject otherObj = GameObject.FindGameObjectWithTag(otherTag);
@@ -35,17 +41,17 @@ public class Move : MonoBehaviour
             other = otherObj.transform;
         }
 
-        // --- FASE DE RETORNO (después de la colisión) ---
+        // -------- FASE DE RETORNO --------
         if (returning)
         {
-            // Movimiento más lento, fluido y controlado
+            // Vuelve lentamente a la posición original local
             transform.localPosition = Vector3.MoveTowards(
                 transform.localPosition,
                 originalLocalPosition,
                 returnSpeed * Time.deltaTime
             );
 
-            // Cuando llega, terminamos el ciclo
+            // Cuando llegue, fijamos la posición y marcamos como terminado
             if (Vector3.Distance(transform.localPosition, originalLocalPosition) < 0.001f)
             {
                 transform.localPosition = originalLocalPosition;
@@ -55,11 +61,14 @@ public class Move : MonoBehaviour
             return;
         }
 
-        // --- FASE DE ATRACCIÓN ---
+        // -------- FASE DE ATRACCIÓN --------
         float distance = Vector3.Distance(transform.position, other.position);
+
+        // Si están lejos, no hacer nada
         if (distance > attractionDistance)
             return;
 
+        // Movimiento suave hacia el otro objeto
         transform.position = Vector3.MoveTowards(
             transform.position,
             other.position,
@@ -67,12 +76,21 @@ public class Move : MonoBehaviour
         );
     }
 
-    // Llamado desde CollisionFX al colisionar
+    // Llamado desde CollisionFX al detectar la colisión
     public void StartReturn()
     {
-        if (finished)
+        if (finished || other == null)
             return;
 
+        // 1) Colocar el cubo justo tocando el otro, sin que se metan uno dentro del otro
+        Vector3 dir = (transform.position - other.position).normalized;
+        // si por alguna razón están en el mismo punto, evitamos un vector (0,0,0)
+        if (dir.sqrMagnitude < 0.0001f)
+            dir = Vector3.forward;
+
+        transform.position = other.position + dir * contactDistance;
+
+        // 2) Activar fase de retorno
         returning = true;
     }
 }

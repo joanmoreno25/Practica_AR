@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8365376494513731716}
   - component: {fileID: 7805937944613760378}
   - component: {fileID: 4423494759402292924}
+  - component: {fileID: 7450509458857287314}
   m_Layer: 0
   m_Name: Marker1Object
   m_TagString: Untagged
@@ -207,6 +208,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7450509458857287314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311082095982660308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33cd79f021354147af66c58446fc8c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherTag: Marker2
+  attractionDistance: 3
+  stopDistance: 0
+  speed: 0.35
 --- !u!1001 &3185540685876249535
 PrefabInstance:
   m_ObjectHideFlags: 0

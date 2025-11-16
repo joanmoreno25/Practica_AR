@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.ARSubsystems;   // 👈 CORRECTO
 
 namespace MyARProject
 {
@@ -67,16 +67,18 @@ namespace MyARProject
 
             GameObject spawnedObject;
 
+            // Instanciamos una vez por marker
             if (!spawnedPrefabs.TryGetValue(imageName, out spawnedObject))
             {
                 spawnedObject = Instantiate(prefabToUse, trackedImage.transform);
                 spawnedPrefabs[imageName] = spawnedObject;
+
+                // Centrado en el marcador, sin tocar la escala
+                spawnedObject.transform.localPosition = Vector3.zero;
+                spawnedObject.transform.localRotation = Quaternion.identity;
             }
 
-            // 🔥 FORZAR EL OBJETO EXACTAMENTE AL CENTRO DEL MARCADOR
-            spawnedObject.transform.localPosition = Vector3.zero;
-            spawnedObject.transform.localRotation = Quaternion.identity;
-
+            // Visibilidad según tracking
             spawnedObject.SetActive(trackedImage.trackingState == TrackingState.Tracking);
         }
     }

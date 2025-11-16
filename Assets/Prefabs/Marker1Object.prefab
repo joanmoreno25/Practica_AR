@@ -226,8 +226,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   otherTag: Marker2
   attractionDistance: 3
-  stopDistance: 0
   speed: 0.35
+  returnSpeed: 0.2
 --- !u!54 &4431317322104253021
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -375,6 +375,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2760738493757110120}
     m_Modifications:
+    - target: {fileID: 417761079494231308, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 417761079494231311, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4,
         type: 3}
       propertyPath: playOnAwake
@@ -449,6 +454,26 @@ PrefabInstance:
         type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 417761080798259124, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 417761080798259124, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 4.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 417761080798259124, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 417761080798259124, guid: 7800b8f6b712bfe49bd663eeb3ebe1e4,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

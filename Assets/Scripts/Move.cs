@@ -3,44 +3,76 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     [Header("Referencia al otro objeto")]
-    [SerializeField] private string otherTag = "Marker2";   // Tag del objeto al que me atraigo
+    [SerializeField] private string otherTag = "Marker2";
 
     [Header("Parámetros de atracción")]
-    [SerializeField] private float attractionDistance = 0.15f; // Distancia a la que empieza la atracción
-    [SerializeField] private float stopDistance = 0.01f;       // Distancia a la que consideramos que ya ha llegado
-    [SerializeField] private float speed = 0.6f;               // 👈 Velocidad (antes 0.2)
+    [SerializeField] private float attractionDistance = 0.15f;
+    [SerializeField] private float speed = 0.6f;
+
+    [Header("Parámetros de retorno")]
+    [SerializeField] private float returnSpeed = 0.2f;   // 👈 RETORNO LENTO Y SUAVE
 
     private Transform other;
+    private Vector3 originalLocalPosition;
+    private bool returning = false;
+    private bool finished = false;
+
+    void Start()
+    {
+        originalLocalPosition = transform.localPosition;
+    }
 
     void Update()
     {
-        // Buscar el otro objeto (Marker2) por tag la primera vez
+        if (finished)
+            return;
+
         if (other == null)
         {
             GameObject otherObj = GameObject.FindGameObjectWithTag(otherTag);
             if (otherObj == null)
-                return; // Aún no existe en escena
+                return;
             other = otherObj.transform;
         }
 
-        float distance = Vector3.Distance(transform.position, other.position);
-
-        // Si estamos demasiado lejos, no hacemos nada
-        if (distance > attractionDistance)
-            return;
-
-        // Si ya estamos casi pegados, lo clavamos y paramos
-        if (distance <= stopDistance)
+        // --- FASE DE RETORNO (después de la colisión) ---
+        if (returning)
         {
-            transform.position = other.position;
+            // Movimiento más lento, fluido y controlado
+            transform.localPosition = Vector3.MoveTowards(
+                transform.localPosition,
+                originalLocalPosition,
+                returnSpeed * Time.deltaTime
+            );
+
+            // Cuando llega, terminamos el ciclo
+            if (Vector3.Distance(transform.localPosition, originalLocalPosition) < 0.001f)
+            {
+                transform.localPosition = originalLocalPosition;
+                finished = true;
+            }
+
             return;
         }
 
-        // Movimiento suave hacia el otro objeto
+        // --- FASE DE ATRACCIÓN ---
+        float distance = Vector3.Distance(transform.position, other.position);
+        if (distance > attractionDistance)
+            return;
+
         transform.position = Vector3.MoveTowards(
             transform.position,
             other.position,
             speed * Time.deltaTime
         );
+    }
+
+    // Llamado desde CollisionFX al colisionar
+    public void StartReturn()
+    {
+        if (finished)
+            return;
+
+        returning = true;
     }
 }

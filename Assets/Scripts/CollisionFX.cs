@@ -10,6 +10,13 @@ public class CollisionFX : MonoBehaviour
     [SerializeField] private ParticleSystem particles;
 
     private bool hasTriggered = false;
+    private Move moveScript;
+
+    private void Start()
+    {
+        // Obtenemos la referencia al script Move del mismo objeto
+        moveScript = GetComponent<Move>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,10 +26,16 @@ public class CollisionFX : MonoBehaviour
 
         hasTriggered = true;
 
+        // Sonido
         if (audioSource != null)
             audioSource.Play();
 
+        // Partículas
         if (particles != null)
             particles.Play();
+
+        // Avisar al script de movimiento para que empiece a volver
+        if (moveScript != null)
+            moveScript.StartReturn();
     }
 }

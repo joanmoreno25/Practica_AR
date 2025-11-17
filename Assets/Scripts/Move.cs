@@ -10,10 +10,10 @@ public class Move : MonoBehaviour
     [SerializeField] private float speed = 0.6f;
 
     [Header("Parámetros de retorno")]
-    [SerializeField] private float returnSpeed = 0.2f;   // retorno lento
+    [SerializeField] private float returnSpeed = 0.2f;  
 
     [Header("Parámetros de contacto")]
-    [SerializeField] private float contactDistance = 0.05f; // distancia entre centros cuando los cubos "se tocan"
+    [SerializeField] private float contactDistance = 0.05f;
 
     private Transform other;
     private Vector3 originalLocalPosition;
@@ -28,11 +28,11 @@ public class Move : MonoBehaviour
 
     void Update()
     {
-        // Si ya ha hecho ida + vuelta, no hacemos nada más
+        // Si ya ha hecho ida y vuelta, no se hace nada más
         if (finished)
             return;
 
-        // Buscar el otro objeto (Marker2) la primera vez
+        // Buscar el otro objeto la primera vez
         if (other == null)
         {
             GameObject otherObj = GameObject.FindGameObjectWithTag(otherTag);
@@ -41,7 +41,7 @@ public class Move : MonoBehaviour
             other = otherObj.transform;
         }
 
-        // -------- FASE DE RETORNO --------
+        // Fase de retorno
         if (returning)
         {
             // Vuelve lentamente a la posición original local
@@ -51,7 +51,7 @@ public class Move : MonoBehaviour
                 returnSpeed * Time.deltaTime
             );
 
-            // Cuando llegue, fijamos la posición y marcamos como terminado
+            // Cuando llegue, se fija la posición y se marca como terminado
             if (Vector3.Distance(transform.localPosition, originalLocalPosition) < 0.001f)
             {
                 transform.localPosition = originalLocalPosition;
@@ -61,7 +61,7 @@ public class Move : MonoBehaviour
             return;
         }
 
-        // -------- FASE DE ATRACCIÓN --------
+        // Fase de atracción
         float distance = Vector3.Distance(transform.position, other.position);
 
         // Si están lejos, no hacer nada
@@ -82,15 +82,15 @@ public class Move : MonoBehaviour
         if (finished || other == null)
             return;
 
-        // 1) Colocar el cubo justo tocando el otro, sin que se metan uno dentro del otro
+        // Colocar el cubo justo tocando el otro, sin que se metan uno dentro del otro
         Vector3 dir = (transform.position - other.position).normalized;
-        // si por alguna razón están en el mismo punto, evitamos un vector (0,0,0)
+        
         if (dir.sqrMagnitude < 0.0001f)
             dir = Vector3.forward;
 
         transform.position = other.position + dir * contactDistance;
 
-        // 2) Activar fase de retorno
+        // Activar fase de retorno
         returning = true;
     }
 }

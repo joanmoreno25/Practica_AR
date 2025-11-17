@@ -16,7 +16,7 @@ public class ARTapToPlacePiano : MonoBehaviour
 
     void Update()
     {
-        // --- MODO EDITOR (XR Simulation) → clic de ratón ---
+        // Clic de ratón XR Simulation
 #if UNITY_EDITOR
         if (Input.GetMouseButtonDown(0))
         {
@@ -24,7 +24,7 @@ public class ARTapToPlacePiano : MonoBehaviour
             TryPlace(screenPosition);
         }
 #else
-        // --- MODO DISPOSITIVO REAL → touch ---
+        // Touch dispositivo real
         if (Input.touchCount == 0)
             return;
 
@@ -50,8 +50,6 @@ public class ARTapToPlacePiano : MonoBehaviour
             {
                 spawnedPiano = Instantiate(pianoPrefab, hitPose.position, hitPose.rotation);
             }
-            // Si quisieras moverlo después, aquí actualizarías su posición,
-            // pero el ejercicio pide que solo se cree uno.
         }
     }
 }

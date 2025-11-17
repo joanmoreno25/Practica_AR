@@ -14,7 +14,7 @@ public class CollisionFX : MonoBehaviour
 
     private void Start()
     {
-        // Obtenemos la referencia al script Move del mismo objeto
+        // Referencia al script Move del mismo objeto
         moveScript = GetComponent<Move>();
     }
 

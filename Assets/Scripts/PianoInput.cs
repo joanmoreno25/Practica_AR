@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PianoInput : MonoBehaviour
 {
-    private Camera arCamera;   // Cámara interna, ya no aparece en el Inspector
+    private Camera arCamera;
 
     void Start()
     {
-        // Usamos siempre la cámara principal
+        // Usar siempre la cámara principal
         arCamera = Camera.main;
     }
 
@@ -41,7 +41,7 @@ public class PianoInput : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            // Miramos si el objeto pulsado tiene un PianoKeySound
+            // Mirar si el objeto pulsado tiene un PianoKeySound
             PianoKeySound key = hit.collider.GetComponent<PianoKeySound>();
             if (key != null)
             {
